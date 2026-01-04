@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать книгу</title>
+</head>
+<body>
+  <h1>Редактировать «<%= book.title %>»</h1>
+  <form method="POST">
+    <label>Название:</label>
+    <input type="text" name="title" value="<%= book.title %>" required><br>
+    <label>Автор:</label>
+    <input type="text" name="author" value="<%= book.author %>" required><br>
+    <label>Описание:</label>
+    <textarea name="description"><%= book.description %></textarea><br>
+    <button type="submit">Сохранить</button>
+  </form>
+  <a href="/books">Назад</a>
+</body>
+</html>

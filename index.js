@@ -1,11 +1,55 @@
 const express = require('express');
 const app = express();
+app.set('view engine', 'ejs');
+app.set('views', './views');
 const PORT = 3000;
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Book API server is running!');
+});
+
+// Маршрут: список книг (HTML)
+app.get('/books', (req, res) => {
+  res.render('index', { books });
+});
+
+// Маршрут: просмотр книги (HTML)
+app.get('/book/:id', (req, res) => {
+  const book = books.find(b => b.id === req.params.id);
+  if (!book) return res.status(404).send('Book not found');
+  res.render('view', { book });
+});
+
+// Маршрут: форма создания книги
+app.get('/book/create', (req, res) => {
+  res.render('create');
+});
+
+// Обработка создания книги (форма → API)
+app.post('/book/create', (req, res) => {
+  const newBook = {
+    ...req.body,
+    id: Date.now().toString()
+  };
+  books.push(newBook);
+  res.redirect('/books'); // Переадресация на список
+});
+
+// Маршрут: форма редактирования книги
+app.get('/book/update/:id', (req, res) => {
+  const book = books.find(b => b.id === req.params.id);
+  if (!book) return res.status(404).send('Book not found');
+  res.render('update', { book });
+});
+
+// Обработка редактирования книги (форма → API)
+app.post('/book/update/:id', (req, res) => {
+  const index = books.findIndex(b => b.id === req.params.id);
+  if (index === -1) return res.status(404).send('Book not found');
+  books[index] = { ...books[index], ...req.body };
+  res.redirect('/books'); // Переадресация на список
 });
 
 app.listen(PORT, () => {
